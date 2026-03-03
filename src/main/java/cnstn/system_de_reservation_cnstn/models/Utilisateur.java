@@ -21,14 +21,21 @@ public class Utilisateur {
     private Long id;
     private String nom;
     private String prenom;
-    @Email
+    @Column(unique = true, nullable = false)
     private String email;
     private String poste;
     private String adresse;
-    private int telephone;
-    private int matricule;
+    @Lob
+    @JsonIgnore
+    private byte[] photo;
+
+    private String photoContentType;
+    private Integer telephone;
+    private Integer matricule;
+    @JsonIgnore //bech ma yo5rejch f il json
     private String password;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
     @JsonIgnore
     @OneToMany(mappedBy = "utilisateur")

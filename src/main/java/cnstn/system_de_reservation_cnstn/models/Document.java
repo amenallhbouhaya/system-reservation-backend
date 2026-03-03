@@ -1,5 +1,6 @@
 package cnstn.system_de_reservation_cnstn.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class Document {
     private CatDocument catDocument;
 
     @ManyToMany(mappedBy = "documents")
+    @JsonIgnore
     private List<Utilisateur> utilisateurs = new ArrayList<>();
 
 

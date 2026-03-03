@@ -21,7 +21,7 @@ public class ServicesController {
     public Services addService(@RequestBody Services services) {
         return servicesService.createServices(services);
     }
-    @GetMapping("all")
+    @GetMapping("/all")
     public List<Services> afficher(){
         return servicesService.findAllServices();
     }

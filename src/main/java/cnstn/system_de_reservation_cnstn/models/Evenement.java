@@ -17,6 +17,8 @@ import lombok.Generated;
 import lombok.NoArgsConstructor;
 import org.hibernate.sql.results.graph.Fetch;
 
+
+
 import java.util.*;
 
 @Entity
@@ -28,28 +30,48 @@ public class Evenement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nom;
     @Column(nullable = false)
     @NotBlank
     private String titre;
     private String description;
     @Column(nullable = false)
+
     private Date dateDebut;
     @Column(nullable = false)
+
     private Date dateFin;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private TypeEvenement typeEvenement;
     @JsonIgnore
     @OneToMany(mappedBy = "evenement", cascade = CascadeType.ALL)
     private List<Partenaire> partenaire = new ArrayList<>();
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
+
+    @JsonIgnore
     @OneToMany(mappedBy ="evenement")
     private List<Equipement> equipement ;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "evenement")
     private List<Salle> salle;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 40, nullable = false)
+    private EvenementStatut statut;
 
+    private String commentaire;// سبب الرفض/ملاحظة (اختياري)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 30)
+    private Role createurRole;
+    /*    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="evenement_id")
+    private Evenement evenement;
+*/
 
 
 

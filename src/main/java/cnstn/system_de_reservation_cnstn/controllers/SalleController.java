@@ -2,6 +2,7 @@ package cnstn.system_de_reservation_cnstn.controllers;
 
 import cnstn.system_de_reservation_cnstn.models.Salle;
 import cnstn.system_de_reservation_cnstn.services.SalleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,17 +10,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/Salle")
+@RequiredArgsConstructor
 public class SalleController {
-    private  SalleService salleService;
-    public void SalleService (SalleService salleService){
-        this.salleService=salleService;
 
-    }
+    private final SalleService salleService;
+
     @PostMapping("/add")
-    public Salle Create(@RequestBody Salle salle){
+    public Salle create(@RequestBody Salle salle){
         return salleService.Create(salle);
-
     }
+
     @GetMapping("/all")
     public List<Salle> affiche(){
         return salleService.findAll();
@@ -31,8 +31,8 @@ public class SalleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         salleService.deleteById(id);
-        return ResponseEntity.ok("Salle supprimée avec succès");
+        return ResponseEntity.noContent().build(); // 204
     }
 }

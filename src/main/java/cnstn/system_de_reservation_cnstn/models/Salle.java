@@ -22,10 +22,10 @@ public class Salle {
     private int capacite;
     private String nom;
     private String description;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "evenement_id")
     private Evenement evenement;
-
 
 
 }

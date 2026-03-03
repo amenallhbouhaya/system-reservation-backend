@@ -23,11 +23,13 @@ public class Equipement {
     private Boolean reservable;
     @Enumerated(EnumType.STRING)
     private TypeEquipement typeEquipement;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "evenement_id")
     private Evenement evenement;
 
     @ManyToMany(mappedBy = "equipement")
+    @JsonIgnore
     private List<Intervention> intervention = new ArrayList<>();
 
 

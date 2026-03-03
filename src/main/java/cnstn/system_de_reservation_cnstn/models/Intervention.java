@@ -1,5 +1,6 @@
 package cnstn.system_de_reservation_cnstn.models;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class Intervention {
     private Long id;
     private String description;
     private String statut;
+
     private Date dateDemande;
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")

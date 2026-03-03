@@ -1,40 +1,28 @@
 package cnstn.system_de_reservation_cnstn.controllers;
 
-import cnstn.system_de_reservation_cnstn.models.Intervention;
+import cnstn.system_de_reservation_cnstn.dto.CreateInterventionRequest;
+import cnstn.system_de_reservation_cnstn.dto.InterventionDto;
 import cnstn.system_de_reservation_cnstn.services.InterventionService;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/Intervention")
+@RequestMapping("/api/interventions")
+@RequiredArgsConstructor
 public class InterventionController {
 
     private final InterventionService interventionService;
 
-    public InterventionController(InterventionService interventionService) {
-        this.interventionService = interventionService;
+    @PostMapping
+    public InterventionDto create(Authentication auth, @RequestBody CreateInterventionRequest req) {
+        return interventionService.create(auth.getName(), req);
     }
 
-    @PostMapping("/add")
-    public Intervention create(@RequestBody Intervention intervention) {
-        return interventionService.create(intervention);
-    }
-
-    @GetMapping("/all")
-    public List<Intervention> Affiche() {
-        return interventionService.findAll();
-    }
-
-    @PutMapping("/{id}")
-    public Intervention updateIntervention(@PathVariable Long id, @RequestBody Intervention intervention) {
-        return interventionService.updateIntervention(id, intervention);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
-        interventionService.deleteById(id);
-        return ResponseEntity.ok("Intervention supprimée avec succès");
+    @GetMapping("/me")
+    public List<InterventionDto> my(Authentication auth) {
+        return interventionService.myInterventions(auth.getName());
     }
 }
