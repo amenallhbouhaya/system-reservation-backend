@@ -8,6 +8,7 @@ import java.util.List;
 public interface SaleRepository extends JpaRepository<Salle, Long> {
 
     List<Salle> findByEvenementIsNull();
+    long countByEvenementIsNotNull();
 
     List<Salle> findByEvenementId(Long evenementId);
 }

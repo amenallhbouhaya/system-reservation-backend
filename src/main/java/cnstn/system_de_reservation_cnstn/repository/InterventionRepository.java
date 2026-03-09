@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface InterventionRepository extends JpaRepository<Intervention, Long> {
     List<Intervention> findByUtilisateurEmail(String email);
+    long countByStatut(String statut);
 }

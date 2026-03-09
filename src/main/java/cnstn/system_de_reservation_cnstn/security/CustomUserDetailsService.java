@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // Spring يتوقّع ROLE_...
-        var auth = new SimpleGrantedAuthority("ROLE_" + u.getRole().name());
+        var auth = new SimpleGrantedAuthority("ROLE_" + u.getRole());
 
         return new org.springframework.security.core.userdetails.User(
                 u.getEmail(),

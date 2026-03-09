@@ -24,7 +24,7 @@ public class JwtService {
 
         return Jwts.builder()
                 .setSubject(u.getEmail())
-                .claim("role", u.getRole().name())
+            .claim("role", u.getRole())
                 .setIssuedAt(now)
                 .setExpiration(exp)
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8)), SignatureAlgorithm.HS256)

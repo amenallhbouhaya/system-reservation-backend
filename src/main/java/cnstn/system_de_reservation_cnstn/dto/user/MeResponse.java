@@ -1,7 +1,5 @@
 package cnstn.system_de_reservation_cnstn.dto.user;
 
-import cnstn.system_de_reservation_cnstn.models.Role;
-
 public record MeResponse(
         Long id,
         String nom,
@@ -11,7 +9,7 @@ public record MeResponse(
         String adresse,
         int telephone,
         int matricule,
-        Role role,
+        String role,
         Long serviceId,
         String serviceNom
 ) {}

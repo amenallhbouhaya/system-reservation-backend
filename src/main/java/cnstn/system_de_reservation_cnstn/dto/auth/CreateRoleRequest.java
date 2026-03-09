@@ -1,3 +1,4 @@
 package cnstn.system_de_reservation_cnstn.dto.auth;
 
-public record UpdateRoleRequest(String role) {}
+public record CreateRoleRequest(String name) {
+}

@@ -1,11 +1,13 @@
 package cnstn.system_de_reservation_cnstn.dto.auth;
 
-public record UtilisateurDto(
+import java.util.Date;
+
+public record PendingRegistrationDto(
         Long id,
         String nom,
         String prenom,
         String email,
-        String role,
         Integer matricule,
-        Integer telephone
+        Integer telephone,
+        Date dateCreation
 ) {}

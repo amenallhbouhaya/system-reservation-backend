@@ -34,9 +34,10 @@ public class Utilisateur {
     private Integer matricule;
     @JsonIgnore //bech ma yo5rejch f il json
     private String password;
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @Column(nullable = false, length = 60)
+    private String role;
+    @Column(name = "approuve", nullable = false)
+    private Boolean approuve = true;
     @JsonIgnore
     @OneToMany(mappedBy = "utilisateur")
     private List<Intervention> intervention;

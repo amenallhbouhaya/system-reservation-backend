@@ -6,13 +6,16 @@ import cnstn.system_de_reservation_cnstn.models.Evenement;
 import cnstn.system_de_reservation_cnstn.models.Salle;
 import cnstn.system_de_reservation_cnstn.repository.EquipementRepository;
 import cnstn.system_de_reservation_cnstn.repository.SaleRepository;
-import cnstn.system_de_reservation_cnstn.repository.SaleRepository;
 import cnstn.system_de_reservation_cnstn.services.EvenementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -60,8 +63,29 @@ public class EvenementController {
 
     // ✅ available resources
     @GetMapping("/salles")
-    public List<Salle> sallesDisponibles() {
-        return salleRepository.findByEvenementIsNull();
+    public List<Salle> sallesDisponibles(
+            @RequestParam(required = false) Long dateDebut,
+            @RequestParam(required = false) Long dateFin
+    ) {
+        if (dateDebut == null || dateFin == null) {
+            return salleRepository.findByEvenementIsNull();
+        }
+
+        Date start = new Date(dateDebut);
+        Date end = new Date(dateFin);
+        return evenementService.availableSalles(start, end);
+    }
+
+    @GetMapping("/reserved-slots")
+    public List<String> reservedSlots(@RequestParam String date) {
+        LocalDate day = LocalDate.parse(date);
+        LocalDateTime startOfDay = day.atStartOfDay();
+        LocalDateTime endOfDay = day.plusDays(1).atStartOfDay();
+
+        Date start = Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
+        Date end = Date.from(endOfDay.atZone(ZoneId.systemDefault()).toInstant());
+
+        return evenementService.reservedSlotsByDay(start, end);
     }
 
     @GetMapping("/equipements")

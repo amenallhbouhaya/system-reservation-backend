@@ -64,9 +64,8 @@ public class Evenement {
     private EvenementStatut statut;
 
     private String commentaire;// سبب الرفض/ملاحظة (اختياري)
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
-    private Role createurRole;
+    @Column(nullable = false, length = 60)
+    private String createurRole;
     /*    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="evenement_id")
