@@ -19,8 +19,10 @@ public class Equipement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Date dateAquisation;
+    private String nom;
     private String etat;
     private Boolean reservable;
+    private String numeroSerie;
     @Enumerated(EnumType.STRING)
     private TypeEquipement typeEquipement;
     @JsonIgnore

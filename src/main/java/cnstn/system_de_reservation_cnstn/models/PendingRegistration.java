@@ -29,6 +29,14 @@ public class PendingRegistration {
     private Integer matricule;
     private Integer telephone;
 
+    @Column(length = 6)
+    private String verificationCode;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date verificationCodeExpiresAt;
+
+    private Boolean emailVerified;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreation;
 }

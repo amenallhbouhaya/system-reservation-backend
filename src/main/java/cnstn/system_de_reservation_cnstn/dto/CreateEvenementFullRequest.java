@@ -11,6 +11,12 @@ public record CreateEvenementFullRequest(
         Long dateDebut,   // timestamp ms
         Long dateFin,     // timestamp ms
         TypeEvenement typeEvenement,
+        String lienEnLigne,
         Long salleId,             // optional
-        List<Long> equipementIds  // optional
+        List<Long> equipementIds,  // optional
+        boolean inviteAll,
+        List<Long> inviteUserIds,
+        List<ExternalPartnerRequest> partenairesExternes,
+        String partenaireNom,
+        String partenaireEmail
 ) {}

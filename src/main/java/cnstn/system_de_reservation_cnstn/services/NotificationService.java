@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +38,15 @@ public class NotificationService {
     public void notifyRole(String role, String message, String type, String targetPath) {
         List<Utilisateur> users = utilisateurRepository.findByRole(role);
         for (Utilisateur user : users) {
+            notifyUser(user, message, type, targetPath);
+        }
+    }
+
+    @Transactional
+    public void notifyUsers(List<Utilisateur> users, String message, String type, String targetPath) {
+        if (users == null || users.isEmpty()) return;
+        List<Utilisateur> unique = users.stream().distinct().collect(Collectors.toList());
+        for (Utilisateur user : unique) {
             notifyUser(user, message, type, targetPath);
         }
     }

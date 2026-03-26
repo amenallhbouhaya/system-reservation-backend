@@ -15,8 +15,17 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<java.util.Map<String, String>> register(@RequestBody RegisterRequest req) {
-        String message = authService.register(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(java.util.Map.of("message", message));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(req));
+    }
+
+    @PostMapping("/register/verify")
+    public ResponseEntity<java.util.Map<String, String>> verifyRegisterCode(@RequestBody VerifyRegisterCodeRequest req) {
+        return ResponseEntity.ok(authService.verifyRegisterCode(req));
+    }
+
+    @PostMapping("/register/resend")
+    public ResponseEntity<java.util.Map<String, String>> resendRegisterCode(@RequestBody ResendRegisterCodeRequest req) {
+        return ResponseEntity.ok(authService.resendRegisterCode(req));
     }
 
     @PostMapping("/login")

@@ -5,10 +5,20 @@ import java.util.List;
 
 public record InterventionDto(
         Long id,
-        String description,
+        String nomDemandeur,
+        String descriptionPanne,
+        String typeAppareil,
+        String numeroSerie,
         String statut,
         Date dateDemande,
         Long demandeurId,
+        String demandeurNom,
+        String demandeurPrenom,
         String demandeurEmail,
-        List<Long> equipementIds
+        String serviceNom,
+        List<Long> equipementIds,
+        String chefCommentaire,
+        String repairMode,
+        String dsnObservation,
+        Date dateReparation
 ) {}

@@ -41,6 +41,7 @@ public class Evenement {
     @Column(nullable = false)
 
     private Date dateFin;
+    private String lienEnLigne;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
     private TypeEvenement typeEvenement;
@@ -62,6 +63,17 @@ public class Evenement {
     @Enumerated(EnumType.STRING)
     @Column(length = 40, nullable = false)
     private EvenementStatut statut;
+
+    @Column(nullable = false)
+    private Boolean inviteAll = false;
+
+    @Column(nullable = false)
+    private Boolean inviteSent = false;
+
+    @ElementCollection
+    @CollectionTable(name = "evenement_invites", joinColumns = @JoinColumn(name = "evenement_id"))
+    @Column(name = "user_id")
+    private List<Long> invitedUserIds = new ArrayList<>();
 
     private String commentaire;// سبب الرفض/ملاحظة (اختياري)
     @Column(nullable = false, length = 60)

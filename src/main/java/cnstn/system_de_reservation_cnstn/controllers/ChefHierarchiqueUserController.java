@@ -52,6 +52,7 @@ public class ChefHierarchiqueUserController {
     public List<PendingRegistrationDto> pendingUsers(Authentication auth) {
         assertChefOrAdmin(auth);
         return pendingRegistrationRepository.findAll().stream()
+            .filter(p -> Boolean.TRUE.equals(p.getEmailVerified()))
                 .map(p -> new PendingRegistrationDto(
                         p.getId(),
                         p.getNom(),

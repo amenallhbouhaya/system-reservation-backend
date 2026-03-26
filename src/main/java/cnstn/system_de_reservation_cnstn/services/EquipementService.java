@@ -13,6 +13,15 @@ public class EquipementService {
     private final EquipementRepository equipementRepository;
 
     public Equipement createEquipement(Equipement equipement) {
+        if (equipement.getDateAquisation() == null) {
+            equipement.setDateAquisation(new java.util.Date());
+        }
+        if (equipement.getEtat() == null || equipement.getEtat().isBlank()) {
+            equipement.setEtat("Bon");
+        }
+        if (equipement.getReservable() == null) {
+            equipement.setReservable(true);
+        }
         return equipementRepository.save(equipement);
 
     }
@@ -24,9 +33,21 @@ public class EquipementService {
     public Equipement updateEquipement(Long id, Equipement equipement) {
         Equipement existingEquipement = equipementRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Equipement not found with id: " + id));
-        existingEquipement.setEtat(equipement.getEtat());
-        existingEquipement.setReservable(equipement.getReservable());
-        existingEquipement.setTypeEquipement(equipement.getTypeEquipement());
+        if (equipement.getNom() != null) {
+            existingEquipement.setNom(equipement.getNom());
+        }
+        if (equipement.getNumeroSerie() != null) {
+            existingEquipement.setNumeroSerie(equipement.getNumeroSerie());
+        }
+        if (equipement.getEtat() != null) {
+            existingEquipement.setEtat(equipement.getEtat());
+        }
+        if (equipement.getReservable() != null) {
+            existingEquipement.setReservable(equipement.getReservable());
+        }
+        if (equipement.getTypeEquipement() != null) {
+            existingEquipement.setTypeEquipement(equipement.getTypeEquipement());
+        }
         return equipementRepository.save(existingEquipement);
     }
 

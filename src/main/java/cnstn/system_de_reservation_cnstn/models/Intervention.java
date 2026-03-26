@@ -20,21 +20,38 @@ public class Intervention {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String description;
-    private String statut;
+    private String nomDemandeur;
+    private String descriptionPanne;
+    private String typeAppareil;
+    private String numeroSerie;
+
+    @Enumerated(EnumType.STRING)
+    private InterventionStatus statut;
 
     private Date dateDemande;
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
-    @ManyToMany
-
+        @ManyToMany
     @JoinTable(
             name = "intervention_equipement",
             joinColumns = @JoinColumn(name = "intervention_id"),
             inverseJoinColumns = @JoinColumn(name = "equipement_id")
     )
     private List<Equipement> equipement = new ArrayList<>();
+
+        @ManyToOne
+        @JoinColumn(name = "service_id")
+        private Services service;
+
+        private String chefCommentaire;
+        private Date chefDecisionAt;
+
+        @Enumerated(EnumType.STRING)
+        private InterventionRepairMode repairMode;
+        private String dsnObservation;
+        private Date dsnDecisionAt;
+        private Date dateReparation;
 
 
 }

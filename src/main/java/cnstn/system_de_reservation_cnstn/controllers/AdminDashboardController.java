@@ -34,7 +34,7 @@ public class AdminDashboardController {
                         + evenmentRepository.countByStatut(EvenementStatut.REFUSE_DSN);
 
         long interventionsTotal = interventionRepository.count();
-        long interventionsEnAttente = interventionRepository.countByStatut("EN_ATTENTE");
+        long interventionsEnAttente = interventionRepository.countByStatut(cnstn.system_de_reservation_cnstn.models.InterventionStatus.EN_ATTENTE_CHEF);
 
         long sallesTotal = saleRepository.count();
         long sallesOccupees = saleRepository.countByEvenementIsNotNull();

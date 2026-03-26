@@ -1,6 +1,7 @@
 package cnstn.system_de_reservation_cnstn.controllers;
 
 import cnstn.system_de_reservation_cnstn.dto.CreateEvenementFullRequest;
+import cnstn.system_de_reservation_cnstn.dto.InviteEmployesRequest;
 import cnstn.system_de_reservation_cnstn.models.Equipement;
 import cnstn.system_de_reservation_cnstn.models.Evenement;
 import cnstn.system_de_reservation_cnstn.models.Salle;
@@ -47,6 +48,12 @@ public class EvenementController {
     public ResponseEntity<String> delete(@PathVariable Long id) {
         evenementService.deleteById(id);
         return ResponseEntity.ok("Evenement supprimé avec succès");
+    }
+
+    @PostMapping("/{id}/invite")
+    public ResponseEntity<String> inviteEmployes(@PathVariable Long id, @RequestBody InviteEmployesRequest req) {
+        evenementService.inviteEmployes(id, req);
+        return ResponseEntity.ok("Invitations envoyées");
     }
 
     // ✅ Employe: create event + reserve salle/equipements
