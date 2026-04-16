@@ -9,6 +9,7 @@ import java.util.Set;
 
 public interface InterventionRepository extends JpaRepository<Intervention, Long> {
     List<Intervention> findByUtilisateurEmail(String email);
+    List<Intervention> findByUtilisateurId(Long utilisateurId);
     long countByStatut(InterventionStatus statut);
     List<Intervention> findByStatut(InterventionStatus statut);
     List<Intervention> findByStatutIn(Set<InterventionStatus> statuts);

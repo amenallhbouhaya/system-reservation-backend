@@ -9,4 +9,5 @@ public interface EvenementInvitationRepository extends JpaRepository<EvenementIn
     Optional<EvenementInvitation> findByReferenceCode(String referenceCode);
     Optional<EvenementInvitation> findByEvenementIdAndUtilisateurId(Long evenementId, Long utilisateurId);
     boolean existsByReferenceCode(String referenceCode);
+    void deleteByUtilisateurId(Long utilisateurId);
 }

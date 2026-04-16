@@ -61,6 +61,18 @@ public class InterventionService {
         }
 
         Intervention saved = interventionRepository.save(i);
+        notificationService.notifyRole(
+            "chef-hierarchique",
+            "Nouvelle demande d'intervention en attente de validation.",
+            "INTERVENTION_PENDING_CHEF",
+            "/chef-hierarchique/interventions"
+        );
+        notificationService.notifyRole(
+            "ChefHierarchique",
+            "Nouvelle demande d'intervention en attente de validation.",
+            "INTERVENTION_PENDING_CHEF",
+            "/chef-hierarchique/interventions"
+        );
         return toDto(saved);
     }
 
@@ -76,10 +88,18 @@ public class InterventionService {
                 .stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    public List<InterventionDto> pendingDsn() {
+    public List<InterventionDto> pendingAdmin() {
         return interventionRepository.findByStatutIn(
-                Set.of(InterventionStatus.EN_ATTENTE_DSN, InterventionStatus.EN_COURS)
+            Set.of(
+                InterventionStatus.EN_ATTENTE_ADMIN,
+                InterventionStatus.EN_ATTENTE_DSN,
+                InterventionStatus.EN_COURS
+            )
         ).stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    public List<InterventionDto> pendingDsn() {
+        return pendingAdmin();
     }
 
     public InterventionDto acceptChef(Long id, String commentaire) {
@@ -90,8 +110,15 @@ public class InterventionService {
 
         i.setChefCommentaire(commentaire);
         i.setChefDecisionAt(new Date());
-        i.setStatut(InterventionStatus.EN_ATTENTE_DSN);
-        return toDto(interventionRepository.save(i));
+        i.setStatut(InterventionStatus.EN_ATTENTE_ADMIN);
+        Intervention saved = interventionRepository.save(i);
+        notificationService.notifyRole(
+            "Admin",
+            "Intervention validee par le chef. Traitement admin requis.",
+            "INTERVENTION_PENDING_ADMIN",
+            "/admin/interventions"
+        );
+        return toDto(saved);
     }
 
     public InterventionDto rejectChef(Long id, String commentaire) {
@@ -112,7 +139,8 @@ public class InterventionService {
 
     public InterventionDto startDsn(Long id, DsnStartInterventionRequest req) {
         Intervention i = interventionRepository.findById(id).orElseThrow();
-        if (i.getStatut() != InterventionStatus.EN_ATTENTE_DSN) {
+        if (i.getStatut() != InterventionStatus.EN_ATTENTE_ADMIN
+                && i.getStatut() != InterventionStatus.EN_ATTENTE_DSN) {
             throw new RuntimeException("Bad state");
         }
 
@@ -157,7 +185,9 @@ public class InterventionService {
 
     public InterventionDto repairDsn(Long id) {
         Intervention i = interventionRepository.findById(id).orElseThrow();
-        if (i.getStatut() != InterventionStatus.EN_ATTENTE_DSN && i.getStatut() != InterventionStatus.EN_COURS) {
+        if (i.getStatut() != InterventionStatus.EN_ATTENTE_ADMIN
+                && i.getStatut() != InterventionStatus.EN_ATTENTE_DSN
+                && i.getStatut() != InterventionStatus.EN_COURS) {
             throw new RuntimeException("Bad state");
         }
 
@@ -176,7 +206,9 @@ public class InterventionService {
 
     public InterventionDto brokenDsn(Long id) {
         Intervention i = interventionRepository.findById(id).orElseThrow();
-        if (i.getStatut() != InterventionStatus.EN_ATTENTE_DSN && i.getStatut() != InterventionStatus.EN_COURS) {
+        if (i.getStatut() != InterventionStatus.EN_ATTENTE_ADMIN
+                && i.getStatut() != InterventionStatus.EN_ATTENTE_DSN
+                && i.getStatut() != InterventionStatus.EN_COURS) {
             throw new RuntimeException("Bad state");
         }
 
@@ -248,13 +280,20 @@ public class InterventionService {
         List<Long> eqIds = (i.getEquipement() == null) ? List.of()
                 : i.getEquipement().stream().map(Equipement::getId).collect(Collectors.toList());
 
+        String statut = null;
+        if (i.getStatut() != null) {
+            statut = i.getStatut() == InterventionStatus.EN_ATTENTE_DSN
+                    ? InterventionStatus.EN_ATTENTE_ADMIN.name()
+                    : i.getStatut().name();
+        }
+
         return new InterventionDto(
                 i.getId(),
             i.getNomDemandeur(),
             i.getDescriptionPanne(),
             i.getTypeAppareil(),
             i.getNumeroSerie(),
-            i.getStatut() != null ? i.getStatut().name() : null,
+            statut,
                 i.getDateDemande(),
                 i.getUtilisateur() != null ? i.getUtilisateur().getId() : null,
             i.getUtilisateur() != null ? i.getUtilisateur().getNom() : null,

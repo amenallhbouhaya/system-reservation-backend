@@ -12,6 +12,7 @@ public interface EvenmentRepository extends JpaRepository<Evenement,Long>{
     List<Evenement> findByStatut(EvenementStatut statut);
         long countByStatut(EvenementStatut statut);
     List<Evenement> findByUtilisateurEmail(String email);
+    List<Evenement> findByUtilisateurId(Long utilisateurId);
     List<Evenement> findByDateDebutLessThanAndDateFinGreaterThanAndStatutNotIn(
             Date dateFin,
             Date dateDebut,

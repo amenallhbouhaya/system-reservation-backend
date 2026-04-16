@@ -6,8 +6,10 @@ import cnstn.system_de_reservation_cnstn.dto.DsnStartInterventionRequest;
 import cnstn.system_de_reservation_cnstn.dto.InterventionDto;
 import cnstn.system_de_reservation_cnstn.services.InterventionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,37 @@ import java.util.Map;
 public class InterventionController {
 
     private final InterventionService interventionService;
+
+    private static String normalizeRole(String value) {
+        if (value == null) return "";
+        return value.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+    }
+
+    private boolean hasRole(Authentication auth, String expectedNormalizedRole) {
+        if (auth == null || auth.getAuthorities() == null) return false;
+
+        return auth.getAuthorities().stream().anyMatch(a -> {
+            String role = a.getAuthority();
+            if (role != null && role.startsWith("ROLE_")) {
+                role = role.substring(5);
+            }
+            return normalizeRole(role).equals(expectedNormalizedRole);
+        });
+    }
+
+    private void assertChefOrAdmin(Authentication auth) {
+        if (hasRole(auth, "chefhierarchique") || hasRole(auth, "admin")) {
+            return;
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acces refuse pour ce role");
+    }
+
+    private void assertAdmin(Authentication auth) {
+        if (hasRole(auth, "admin")) {
+            return;
+        }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Acces reserve a l'admin");
+    }
 
     @PostMapping
     public InterventionDto create(Authentication auth, @RequestBody CreateInterventionRequest req) {
@@ -30,44 +63,82 @@ public class InterventionController {
     }
 
     @GetMapping("/chef/pending")
-    public List<InterventionDto> pendingChef() {
+    public List<InterventionDto> pendingChef(Authentication auth) {
+        assertChefOrAdmin(auth);
         return interventionService.pendingChef();
     }
 
     @PostMapping("/chef/{id}/accept")
-    public InterventionDto acceptChef(@PathVariable Long id, @RequestBody(required = false) Map<String, String> body) {
+    public InterventionDto acceptChef(Authentication auth, @PathVariable Long id, @RequestBody(required = false) Map<String, String> body) {
+        assertChefOrAdmin(auth);
         String commentaire = body == null ? null : body.get("commentaire");
         return interventionService.acceptChef(id, commentaire);
     }
 
     @PostMapping("/chef/{id}/reject")
-    public InterventionDto rejectChef(@PathVariable Long id, @RequestBody Map<String, String> body) {
+    public InterventionDto rejectChef(Authentication auth, @PathVariable Long id, @RequestBody Map<String, String> body) {
+        assertChefOrAdmin(auth);
         String commentaire = body == null ? null : body.get("commentaire");
         return interventionService.rejectChef(id, commentaire);
     }
 
+    @GetMapping("/admin/pending")
+    public List<InterventionDto> pendingAdmin(Authentication auth) {
+        assertAdmin(auth);
+        return interventionService.pendingAdmin();
+    }
+
+    @PostMapping("/admin/{id}/start")
+    public InterventionDto startAdmin(Authentication auth, @PathVariable Long id, @RequestBody DsnStartInterventionRequest req) {
+        assertAdmin(auth);
+        return interventionService.startDsn(id, req);
+    }
+
+    @PostMapping("/admin/{id}/complete")
+    public InterventionDto completeAdmin(Authentication auth, @PathVariable Long id, @RequestBody DsnCompleteInterventionRequest req) {
+        assertAdmin(auth);
+        return interventionService.completeDsn(id, req);
+    }
+
+    @PostMapping("/admin/{id}/repair")
+    public InterventionDto repairAdmin(Authentication auth, @PathVariable Long id) {
+        assertAdmin(auth);
+        return interventionService.repairDsn(id);
+    }
+
+    @PostMapping("/admin/{id}/broken")
+    public InterventionDto brokenAdmin(Authentication auth, @PathVariable Long id) {
+        assertAdmin(auth);
+        return interventionService.brokenDsn(id);
+    }
+
     @GetMapping("/dsn/pending")
-    public List<InterventionDto> pendingDsn() {
-        return interventionService.pendingDsn();
+    public List<InterventionDto> pendingDsn(Authentication auth) {
+        assertAdmin(auth);
+        return interventionService.pendingAdmin();
     }
 
     @PostMapping("/dsn/{id}/start")
-    public InterventionDto startDsn(@PathVariable Long id, @RequestBody DsnStartInterventionRequest req) {
+    public InterventionDto startDsn(Authentication auth, @PathVariable Long id, @RequestBody DsnStartInterventionRequest req) {
+        assertAdmin(auth);
         return interventionService.startDsn(id, req);
     }
 
     @PostMapping("/dsn/{id}/complete")
-    public InterventionDto completeDsn(@PathVariable Long id, @RequestBody DsnCompleteInterventionRequest req) {
+    public InterventionDto completeDsn(Authentication auth, @PathVariable Long id, @RequestBody DsnCompleteInterventionRequest req) {
+        assertAdmin(auth);
         return interventionService.completeDsn(id, req);
     }
 
     @PostMapping("/dsn/{id}/repair")
-    public InterventionDto repairDsn(@PathVariable Long id) {
+    public InterventionDto repairDsn(Authentication auth, @PathVariable Long id) {
+        assertAdmin(auth);
         return interventionService.repairDsn(id);
     }
 
     @PostMapping("/dsn/{id}/broken")
-    public InterventionDto brokenDsn(@PathVariable Long id) {
+    public InterventionDto brokenDsn(Authentication auth, @PathVariable Long id) {
+        assertAdmin(auth);
         return interventionService.brokenDsn(id);
     }
 }

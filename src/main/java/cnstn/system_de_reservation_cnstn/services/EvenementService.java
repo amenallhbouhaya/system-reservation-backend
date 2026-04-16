@@ -1,6 +1,8 @@
 package cnstn.system_de_reservation_cnstn.services;
 
 import cnstn.system_de_reservation_cnstn.dto.CreateEvenementFullRequest;
+import cnstn.system_de_reservation_cnstn.dto.EvenementAgendaDto;
+import cnstn.system_de_reservation_cnstn.dto.EvenementPendingDto;
 import cnstn.system_de_reservation_cnstn.dto.ExternalPartnerRequest;
 import cnstn.system_de_reservation_cnstn.dto.InviteEmployesRequest;
 import cnstn.system_de_reservation_cnstn.dto.InvitationViewDto;
@@ -442,6 +444,17 @@ public class EvenementService {
         }
 
         @Transactional(readOnly = true)
+        public List<Salle> sallesDisponibles(Long dateDebut, Long dateFin) {
+        if (dateDebut == null || dateFin == null) {
+            return saleRepository.findByEvenementIsNull();
+        }
+
+        Date start = new Date(dateDebut);
+        Date end = new Date(dateFin);
+        return availableSalles(start, end);
+        }
+
+        @Transactional(readOnly = true)
         public List<Equipement> availableEquipements(Date start, Date end) {
         List<Evenement> overlaps = evenmentRepository
             .findByDateDebutLessThanAndDateFinGreaterThanAndStatutNotIn(
@@ -461,12 +474,18 @@ public class EvenementService {
                 eq.getId(),
                 Set.of(
                     InterventionStatus.EN_ATTENTE_CHEF,
+                    InterventionStatus.EN_ATTENTE_ADMIN,
                     InterventionStatus.EN_ATTENTE_DSN,
                     InterventionStatus.EN_COURS
                 )
             ).isEmpty())
             .filter(eq -> !occupiedEquipementIds.contains(eq.getId()))
             .toList();
+        }
+
+        @Transactional(readOnly = true)
+        public List<Equipement> equipementsDisponibles() {
+        return equipementRepository.findByEvenementIsNullAndReservableTrue();
         }
 
         @Transactional(readOnly = true)
@@ -494,6 +513,7 @@ public class EvenementService {
                 eq.getId(),
                 Set.of(
                     InterventionStatus.EN_ATTENTE_CHEF,
+                    InterventionStatus.EN_ATTENTE_ADMIN,
                     InterventionStatus.EN_ATTENTE_DSN,
                     InterventionStatus.EN_COURS
                 )
@@ -529,6 +549,84 @@ public class EvenementService {
             .flatMap(ev -> ev.getEquipement() == null ? java.util.stream.Stream.<Equipement>empty() : ev.getEquipement().stream())
             .anyMatch(eq -> equipementId.equals(eq.getId()));
         }
+
+    @Transactional(readOnly = true)
+    public List<EvenementPendingDto> pendingForRsalle() {
+        return pendingByStatut(EvenementStatut.EN_ATTENTE_RSALLE);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EvenementPendingDto> pendingForRsec() {
+        return pendingByStatut(EvenementStatut.EN_ATTENTE_RSEC);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EvenementPendingDto> pendingForDsn() {
+        return pendingByStatut(EvenementStatut.EN_ATTENTE_DSN);
+    }
+
+    @Transactional(readOnly = true)
+    public List<EvenementAgendaDto> agenda() {
+        return evenmentRepository.findAll().stream()
+                .map(this::toAgendaDto)
+                .toList();
+    }
+
+    private List<EvenementPendingDto> pendingByStatut(EvenementStatut statut) {
+        return evenmentRepository.findByStatut(statut)
+                .stream()
+                .map(this::toPendingDto)
+                .toList();
+    }
+
+    private EvenementPendingDto toPendingDto(Evenement evenement) {
+        List<Salle> salles = saleRepository.findByEvenementId(evenement.getId());
+        String salleNom = salles.isEmpty() ? null : salles.get(0).getNom();
+        Integer salleCap = salles.isEmpty() ? null : salles.get(0).getCapacite();
+
+        List<String> eqNames = equipementRepository.findByEvenementId(evenement.getId())
+                .stream()
+                .map(eq -> eq.getTypeEquipement() + " - " + eq.getEtat())
+                .toList();
+
+        String email = (evenement.getUtilisateur() != null) ? evenement.getUtilisateur().getEmail() : null;
+
+        return new EvenementPendingDto(
+                evenement.getId(),
+                evenement.getTitre(),
+                evenement.getDateDebut(),
+                evenement.getDateFin(),
+                evenement.getTypeEvenement(),
+                evenement.getStatut().toString(),
+                salleNom,
+                salleCap,
+                eqNames,
+                email
+        );
+    }
+
+    private EvenementAgendaDto toAgendaDto(Evenement evenement) {
+        List<String> salleNames = saleRepository.findByEvenementId(evenement.getId())
+                .stream()
+                .map(Salle::getNom)
+                .toList();
+
+        List<String> equipNames = equipementRepository.findByEvenementId(evenement.getId())
+                .stream()
+                .map(eq -> eq.getTypeEquipement() + " - " + eq.getEtat())
+                .toList();
+
+        return new EvenementAgendaDto(
+                evenement.getId(),
+                evenement.getTitre(),
+                evenement.getDateDebut(),
+                evenement.getDateFin(),
+                evenement.getTypeEvenement(),
+                evenement.getStatut().toString(),
+                salleNames,
+                equipNames
+        );
+    }
 
     public List<Evenement> findAll() {
         return evenmentRepository.findAll();

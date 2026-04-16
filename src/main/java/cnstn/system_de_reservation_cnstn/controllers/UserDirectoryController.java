@@ -1,7 +1,7 @@
 package cnstn.system_de_reservation_cnstn.controllers;
 
 import cnstn.system_de_reservation_cnstn.dto.auth.UtilisateurDto;
-import cnstn.system_de_reservation_cnstn.repository.UtilisateurRepository;
+import cnstn.system_de_reservation_cnstn.services.UserDirectoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,20 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserDirectoryController {
 
-    private final UtilisateurRepository utilisateurRepository;
+    private final UserDirectoryService userDirectoryService;
 
     @GetMapping("/list")
     public List<UtilisateurDto> listAll() {
-        return utilisateurRepository.findAll().stream()
-                .map(u -> new UtilisateurDto(
-                        u.getId(),
-                        u.getNom(),
-                        u.getPrenom(),
-                        u.getEmail(),
-                        u.getRole(),
-                        u.getMatricule(),
-                        u.getTelephone()
-                ))
-                .toList();
+        return userDirectoryService.listAll();
     }
 }

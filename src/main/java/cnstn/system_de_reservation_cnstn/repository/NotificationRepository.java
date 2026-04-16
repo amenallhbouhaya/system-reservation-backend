@@ -8,4 +8,5 @@ import java.util.List;
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
     List<Notification> findTop50ByUtilisateurEmailOrderByDateCreationDesc(String email);
     long countByUtilisateurEmailAndLuFalse(String email);
+    void deleteByUtilisateurId(Long utilisateurId);
 }

@@ -5,8 +5,6 @@ import cnstn.system_de_reservation_cnstn.dto.InviteEmployesRequest;
 import cnstn.system_de_reservation_cnstn.models.Equipement;
 import cnstn.system_de_reservation_cnstn.models.Evenement;
 import cnstn.system_de_reservation_cnstn.models.Salle;
-import cnstn.system_de_reservation_cnstn.repository.EquipementRepository;
-import cnstn.system_de_reservation_cnstn.repository.SaleRepository;
 import cnstn.system_de_reservation_cnstn.services.EvenementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +23,6 @@ import java.util.List;
 public class EvenementController {
 
     private final EvenementService evenementService;
-    private final SaleRepository salleRepository;
-    private final EquipementRepository equipementRepository;
 
     // CRUD متاع admin (ولا تستعملوه للي تحب)
     @PostMapping("/add")
@@ -74,13 +70,7 @@ public class EvenementController {
             @RequestParam(required = false) Long dateDebut,
             @RequestParam(required = false) Long dateFin
     ) {
-        if (dateDebut == null || dateFin == null) {
-            return salleRepository.findByEvenementIsNull();
-        }
-
-        Date start = new Date(dateDebut);
-        Date end = new Date(dateFin);
-        return evenementService.availableSalles(start, end);
+        return evenementService.sallesDisponibles(dateDebut, dateFin);
     }
 
     @GetMapping("/reserved-slots")
@@ -97,6 +87,6 @@ public class EvenementController {
 
     @GetMapping("/equipements")
     public List<Equipement> equipementsDisponibles() {
-        return equipementRepository.findByEvenementIsNullAndReservableTrue();
+        return evenementService.equipementsDisponibles();
     }
 }

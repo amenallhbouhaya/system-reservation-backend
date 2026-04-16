@@ -1,8 +1,7 @@
 package cnstn.system_de_reservation_cnstn.controllers;
 
 import cnstn.system_de_reservation_cnstn.dto.auth.CreateRoleRequest;
-import cnstn.system_de_reservation_cnstn.models.AppRole;
-import cnstn.system_de_reservation_cnstn.repository.AppRoleRepository;
+import cnstn.system_de_reservation_cnstn.services.AdminRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,30 +15,15 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminRoleController {
 
-    private final AppRoleRepository appRoleRepository;
+    private final AdminRoleService adminRoleService;
 
     @GetMapping
     public List<String> allRoles() {
-        return appRoleRepository.findAll().stream()
-                .map(AppRole::getName)
-                .sorted(String::compareToIgnoreCase)
-                .toList();
+        return adminRoleService.allRoles();
     }
 
     @PostMapping
     public ResponseEntity<Map<String, String>> createRole(@RequestBody CreateRoleRequest req) {
-        if (req == null || req.name() == null || req.name().isBlank()) {
-            throw new RuntimeException("Role name is required");
-        }
-
-        String normalized = req.name().trim();
-        if (appRoleRepository.existsByName(normalized)) {
-            throw new RuntimeException("Role already exists");
-        }
-
-        AppRole role = new AppRole();
-        role.setName(normalized);
-        appRoleRepository.save(role);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("name", normalized));
+        return ResponseEntity.status(HttpStatus.CREATED).body(adminRoleService.createRole(req));
     }
 }
