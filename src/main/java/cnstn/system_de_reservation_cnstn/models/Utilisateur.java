@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -34,6 +35,15 @@ public class Utilisateur {
     private Integer matricule;
     @JsonIgnore //bech ma yo5rejch f il json
     private String password;
+
+    @JsonIgnore
+    @Column(length = 6)
+    private String passwordResetCode;
+
+    @JsonIgnore
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date passwordResetCodeExpiresAt;
+
     @Column(nullable = false, length = 60)
     private String role;
     @Column(name = "approuve", nullable = false)

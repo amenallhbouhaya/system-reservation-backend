@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/Document")
+@RequestMapping({"/api/documents", "/Document"})
 @RequiredArgsConstructor
 public class DocumentController {
 
     private final DocumentService documentService;
 
-    @PostMapping("/add")
+    @PostMapping({"", "/add"})
     public Document createDocument(@RequestBody Document document) {
         return documentService.CreateDocument(document);
     }
 
-    @GetMapping("/all")
+    @GetMapping({"", "/all"})
     public List<Document> afficher() {
         return documentService.findAll();
     }
@@ -33,9 +33,9 @@ public class DocumentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         documentService.deleteById(id);
-        return ResponseEntity.ok("Document supprimé avec succès");
+        return ResponseEntity.noContent().build();
     }
 
     // ✅ Documents متاع المستخدم الحالي (many-to-many)

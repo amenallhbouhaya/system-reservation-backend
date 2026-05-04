@@ -156,15 +156,83 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest req) {
-        Utilisateur u = utilisateurRepository.findByEmail(req.email())
+        String email = req == null || req.email() == null ? "" : req.email().trim().toLowerCase();
+        String password = req == null || req.password() == null ? "" : req.password();
+
+        Utilisateur u = utilisateurRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Bad credentials"));
 
-        if (!passwordEncoder.matches(req.password(), u.getPassword())) {
+        if (!passwordEncoder.matches(password, u.getPassword())) {
             throw new RuntimeException("Bad credentials");
         }
 
         String token = jwtService.generateToken(u);
         return new AuthResponse(token, u.getRole());
+    }
+
+    public Map<String, String> forgotPassword(ForgotPasswordRequest req) {
+        String email = req == null || req.email() == null ? "" : req.email().trim().toLowerCase();
+        if (email.isBlank()) {
+            throw new RuntimeException("Email obligatoire");
+        }
+
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Aucun compte trouve pour cet email"));
+
+        String code = generateVerificationCode();
+        utilisateur.setPasswordResetCode(code);
+        utilisateur.setPasswordResetCodeExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000L));
+        utilisateurRepository.save(utilisateur);
+
+        boolean sent = emailService.sendSimpleEmail(
+                email,
+                "Code de reinitialisation - CNSTN",
+                buildPasswordResetEmailBody(utilisateur.getPrenom(), code)
+        );
+
+        if (!sent) {
+            throw new RuntimeException("Impossible d'envoyer le code de reinitialisation par email");
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Code de reinitialisation envoye par email.");
+        response.put("email", email);
+        return response;
+    }
+
+    public Map<String, String> resetPassword(ResetPasswordRequest req) {
+        String email = req == null || req.email() == null ? "" : req.email().trim().toLowerCase();
+        String code = req == null || req.code() == null ? "" : req.code().trim();
+        String newPassword = req == null || req.newPassword() == null ? "" : req.newPassword().trim();
+
+        if (email.isBlank()) {
+            throw new RuntimeException("Email obligatoire");
+        }
+        if (code.isBlank()) {
+            throw new RuntimeException("Code de reinitialisation obligatoire");
+        }
+        if (newPassword.isBlank()) {
+            throw new RuntimeException("Nouveau mot de passe obligatoire");
+        }
+
+        Utilisateur utilisateur = utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Demande de reinitialisation invalide"));
+
+        if (utilisateur.getPasswordResetCode() == null || !utilisateur.getPasswordResetCode().equals(code)) {
+            throw new RuntimeException("Code de reinitialisation invalide");
+        }
+
+        Date expiresAt = utilisateur.getPasswordResetCodeExpiresAt();
+        if (expiresAt == null || expiresAt.before(new Date())) {
+            throw new RuntimeException("Code de reinitialisation expire");
+        }
+
+        utilisateur.setPassword(passwordEncoder.encode(newPassword));
+        utilisateur.setPasswordResetCode(null);
+        utilisateur.setPasswordResetCodeExpiresAt(null);
+        utilisateurRepository.save(utilisateur);
+
+        return Map.of("message", "Mot de passe reinitialise avec succes.");
     }
 
     private static String generateVerificationCode() {
@@ -177,6 +245,16 @@ public class AuthService {
         return "Bonjour" + displayName + ",\n\n"
                 + "Votre code de verification est: " + code + "\n"
                 + "Ce code expire dans 10 minutes.\n\n"
+                + "Cordialement,\nCNSTN";
+    }
+
+    private static String buildPasswordResetEmailBody(String prenom, String code) {
+        String displayName = (prenom == null || prenom.isBlank()) ? "" : (" " + prenom.trim());
+        return "Bonjour" + displayName + ",\n\n"
+                + "Vous avez demande la reinitialisation de votre mot de passe.\n"
+                + "Votre code de reinitialisation est: " + code + "\n"
+                + "Ce code expire dans 10 minutes.\n\n"
+                + "Si vous n'etes pas a l'origine de cette demande, ignorez cet email.\n\n"
                 + "Cordialement,\nCNSTN";
     }
 

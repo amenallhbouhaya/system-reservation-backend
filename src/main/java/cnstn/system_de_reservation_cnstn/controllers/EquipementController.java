@@ -1,13 +1,15 @@
 package cnstn.system_de_reservation_cnstn.controllers;
 
-import cnstn.system_de_reservation_cnstn.models.Equipement;
+import cnstn.system_de_reservation_cnstn.dto.equipement.EquipementRequest;
+import cnstn.system_de_reservation_cnstn.dto.equipement.EquipementResponse;
 import cnstn.system_de_reservation_cnstn.services.EquipementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/Equipement")
+@RequestMapping({"/api/equipements", "/Equipement"})
 public class EquipementController {
 
     private final EquipementService equipementService;
@@ -16,24 +18,24 @@ public class EquipementController {
         this.equipementService = equipementService;
     }
 
-    @PostMapping("/add")
-    public Equipement createEquipement(@RequestBody Equipement equipement){
-        return equipementService.createEquipement(equipement);
+    @PostMapping({"", "/add"})
+    public EquipementResponse createEquipement(@RequestBody EquipementRequest request) {
+        return equipementService.create(request);
     }
 
-    @GetMapping
-    public List<Equipement> afficher(){
-        return equipementService.findAll();
+    @GetMapping({"", "/all"})
+    public List<EquipementResponse> afficher() {
+        return equipementService.findAllResponses();
     }
 
     @PutMapping("/{id}")
-    public Equipement updateEquipement(@PathVariable Long id, @RequestBody Equipement equipement) {
-        return equipementService.updateEquipement(id, equipement);
+    public EquipementResponse updateEquipement(@PathVariable Long id, @RequestBody EquipementRequest request) {
+        return equipementService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         equipementService.deleteById(id);
-        return ResponseEntity.ok("Equipement supprimé avec succès");
+        return ResponseEntity.noContent().build();
     }
 }
