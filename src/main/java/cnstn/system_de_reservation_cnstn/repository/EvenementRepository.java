@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Date;
 import java.util.List;
 
-public interface EvenmentRepository extends JpaRepository<Evenement,Long>{
+public interface EvenementRepository extends JpaRepository<Evenement,Long>{
    Evenement findEvenementById(Long id);
     List<Evenement> findByStatut(EvenementStatut statut);
         long countByStatut(EvenementStatut statut);

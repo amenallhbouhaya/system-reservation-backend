@@ -13,9 +13,9 @@ import cnstn.system_de_reservation_cnstn.repository.EvenementExternalInvitationR
 import cnstn.system_de_reservation_cnstn.dto.EquipementAvailabilityDto;
 import cnstn.system_de_reservation_cnstn.models.*;
 import cnstn.system_de_reservation_cnstn.repository.EquipementRepository;
-import cnstn.system_de_reservation_cnstn.repository.EvenmentRepository;
+import cnstn.system_de_reservation_cnstn.repository.EvenementRepository;
 import cnstn.system_de_reservation_cnstn.repository.InterventionRepository;
-import cnstn.system_de_reservation_cnstn.repository.SaleRepository;
+import cnstn.system_de_reservation_cnstn.repository.SalleRepository;
 import cnstn.system_de_reservation_cnstn.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +35,9 @@ import java.util.ArrayList;
 @Slf4j
 public class EvenementService {
 
-    private final EvenmentRepository evenmentRepository;
+    private final EvenementRepository evenmentRepository;
     private final UtilisateurRepository utilisateurRepository;
-    private final SaleRepository saleRepository;
+    private final SalleRepository saleRepository;
     private final EquipementRepository equipementRepository;
     private final NotificationService notificationService;
     private final EvenementInvitationRepository invitationRepository;

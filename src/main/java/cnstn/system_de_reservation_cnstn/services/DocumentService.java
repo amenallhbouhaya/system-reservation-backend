@@ -5,7 +5,7 @@ import cnstn.system_de_reservation_cnstn.models.Document;
 import cnstn.system_de_reservation_cnstn.models.Evenement;
 import cnstn.system_de_reservation_cnstn.models.Utilisateur;
 import cnstn.system_de_reservation_cnstn.repository.DocumentRepository;
-import cnstn.system_de_reservation_cnstn.repository.EvenmentRepository;
+import cnstn.system_de_reservation_cnstn.repository.EvenementRepository;
 import cnstn.system_de_reservation_cnstn.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -25,7 +25,7 @@ public class DocumentService {
 
     private final DocumentRepository documentRepository;
     private final UtilisateurRepository utilisateurRepository;
-    private final EvenmentRepository evenmentRepository;
+    private final EvenementRepository evenmentRepository;
     private final FileStorageService storage;
 
     public Document CreateDocument(Document document) {

@@ -49,8 +49,8 @@ public class Intervention {
 
         @Enumerated(EnumType.STRING)
         private InterventionRepairMode repairMode;
-        private String dsnObservation;
-        private Date dsnDecisionAt;
+        private String adminObservation;
+        private Date adminDecisionAt;
         private Date dateReparation;
 
 

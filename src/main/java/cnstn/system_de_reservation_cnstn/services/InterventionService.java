@@ -1,8 +1,8 @@
 package cnstn.system_de_reservation_cnstn.services;
 
 import cnstn.system_de_reservation_cnstn.dto.CreateInterventionRequest;
-import cnstn.system_de_reservation_cnstn.dto.DsnCompleteInterventionRequest;
-import cnstn.system_de_reservation_cnstn.dto.DsnStartInterventionRequest;
+import cnstn.system_de_reservation_cnstn.dto.AdminCompleteInterventionRequest;
+import cnstn.system_de_reservation_cnstn.dto.AdminStartInterventionRequest;
 import cnstn.system_de_reservation_cnstn.dto.InterventionDto;
 import cnstn.system_de_reservation_cnstn.models.Equipement;
 import cnstn.system_de_reservation_cnstn.models.Intervention;
@@ -92,14 +92,9 @@ public class InterventionService {
         return interventionRepository.findByStatutIn(
             Set.of(
                 InterventionStatus.EN_ATTENTE_ADMIN,
-                InterventionStatus.EN_ATTENTE_DSN,
                 InterventionStatus.EN_COURS
             )
         ).stream().map(this::toDto).collect(Collectors.toList());
-    }
-
-    public List<InterventionDto> pendingDsn() {
-        return pendingAdmin();
     }
 
     public InterventionDto acceptChef(Long id, String commentaire) {
@@ -137,10 +132,9 @@ public class InterventionService {
         return toDto(interventionRepository.save(i));
     }
 
-    public InterventionDto startDsn(Long id, DsnStartInterventionRequest req) {
+    public InterventionDto startAdmin(Long id, AdminStartInterventionRequest req) {
         Intervention i = interventionRepository.findById(id).orElseThrow();
-        if (i.getStatut() != InterventionStatus.EN_ATTENTE_ADMIN
-                && i.getStatut() != InterventionStatus.EN_ATTENTE_DSN) {
+        if (i.getStatut() != InterventionStatus.EN_ATTENTE_ADMIN) {
             throw new RuntimeException("Bad state");
         }
 
@@ -148,7 +142,7 @@ public class InterventionService {
         if (mode == null) throw new RuntimeException("Repair mode required");
 
         i.setRepairMode(mode);
-        i.setDsnDecisionAt(new Date());
+        i.setAdminDecisionAt(new Date());
         i.setStatut(InterventionStatus.EN_COURS);
         Intervention saved = interventionRepository.save(i);
         notificationService.notifyUser(
@@ -160,7 +154,7 @@ public class InterventionService {
         return toDto(saved);
     }
 
-    public InterventionDto completeDsn(Long id, DsnCompleteInterventionRequest req) {
+    public InterventionDto completeAdmin(Long id, AdminCompleteInterventionRequest req) {
         Intervention i = interventionRepository.findById(id).orElseThrow();
         if (i.getStatut() != InterventionStatus.EN_COURS) {
             throw new RuntimeException("Bad state");
@@ -170,7 +164,7 @@ public class InterventionService {
             throw new RuntimeException("Date reparation required");
         }
 
-        i.setDsnObservation(req.observation());
+        i.setAdminObservation(req.observation());
         i.setDateReparation(req.dateReparation());
         i.setStatut(InterventionStatus.REPARE);
         Intervention saved = interventionRepository.save(i);
@@ -183,15 +177,14 @@ public class InterventionService {
         return toDto(saved);
     }
 
-    public InterventionDto repairDsn(Long id) {
+    public InterventionDto repairAdmin(Long id) {
         Intervention i = interventionRepository.findById(id).orElseThrow();
         if (i.getStatut() != InterventionStatus.EN_ATTENTE_ADMIN
-                && i.getStatut() != InterventionStatus.EN_ATTENTE_DSN
                 && i.getStatut() != InterventionStatus.EN_COURS) {
             throw new RuntimeException("Bad state");
         }
 
-        i.setDsnDecisionAt(new Date());
+        i.setAdminDecisionAt(new Date());
         i.setDateReparation(new Date());
         i.setStatut(InterventionStatus.REPARE);
         Intervention saved = interventionRepository.save(i);
@@ -204,10 +197,9 @@ public class InterventionService {
         return toDto(saved);
     }
 
-    public InterventionDto brokenDsn(Long id) {
+    public InterventionDto brokenAdmin(Long id) {
         Intervention i = interventionRepository.findById(id).orElseThrow();
         if (i.getStatut() != InterventionStatus.EN_ATTENTE_ADMIN
-                && i.getStatut() != InterventionStatus.EN_ATTENTE_DSN
                 && i.getStatut() != InterventionStatus.EN_COURS) {
             throw new RuntimeException("Bad state");
         }
@@ -233,7 +225,7 @@ public class InterventionService {
             equipementRepository.delete(eq);
         }
 
-        i.setDsnDecisionAt(new Date());
+        i.setAdminDecisionAt(new Date());
         i.setStatut(InterventionStatus.CASSE);
         Intervention saved = interventionRepository.save(i);
         notificationService.notifyUser(
@@ -282,9 +274,7 @@ public class InterventionService {
 
         String statut = null;
         if (i.getStatut() != null) {
-            statut = i.getStatut() == InterventionStatus.EN_ATTENTE_DSN
-                    ? InterventionStatus.EN_ATTENTE_ADMIN.name()
-                    : i.getStatut().name();
+            statut = i.getStatut().name();
         }
 
         return new InterventionDto(
@@ -303,7 +293,7 @@ public class InterventionService {
             eqIds,
             i.getChefCommentaire(),
             i.getRepairMode() != null ? i.getRepairMode().name() : null,
-            i.getDsnObservation(),
+            i.getAdminObservation(),
             i.getDateReparation()
         );
     }

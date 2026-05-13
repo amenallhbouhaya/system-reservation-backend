@@ -7,7 +7,7 @@ import cnstn.system_de_reservation_cnstn.models.Intervention;
 import cnstn.system_de_reservation_cnstn.models.Utilisateur;
 import cnstn.system_de_reservation_cnstn.repository.AppRoleRepository;
 import cnstn.system_de_reservation_cnstn.repository.EvenementInvitationRepository;
-import cnstn.system_de_reservation_cnstn.repository.EvenmentRepository;
+import cnstn.system_de_reservation_cnstn.repository.EvenementRepository;
 import cnstn.system_de_reservation_cnstn.repository.InterventionRepository;
 import cnstn.system_de_reservation_cnstn.repository.NotificationRepository;
 import cnstn.system_de_reservation_cnstn.repository.UtilisateurRepository;
@@ -28,7 +28,7 @@ public class AdminUserService {
     private final AppRoleRepository appRoleRepository;
     private final NotificationRepository notificationRepository;
     private final EvenementInvitationRepository evenementInvitationRepository;
-    private final EvenmentRepository evenmentRepository;
+    private final EvenementRepository evenmentRepository;
     private final InterventionRepository interventionRepository;
 
     public List<UtilisateurDto> allUsers() {

@@ -19,6 +19,6 @@ public record InterventionDto(
         List<Long> equipementIds,
         String chefCommentaire,
         String repairMode,
-        String dsnObservation,
+        String adminObservation,
         Date dateReparation
 ) {}

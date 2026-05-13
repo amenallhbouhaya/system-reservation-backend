@@ -3,7 +3,7 @@ package cnstn.system_de_reservation_cnstn.services;
 import cnstn.system_de_reservation_cnstn.dto.salle.SalleRequest;
 import cnstn.system_de_reservation_cnstn.dto.salle.SalleResponse;
 import cnstn.system_de_reservation_cnstn.models.Salle;
-import cnstn.system_de_reservation_cnstn.repository.SaleRepository;
+import cnstn.system_de_reservation_cnstn.repository.SalleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SalleService {
 
-    private final SaleRepository saleRepository;
+    private final SalleRepository saleRepository;
 
     public SalleResponse create(SalleRequest request) {
         Salle salle = new Salle();

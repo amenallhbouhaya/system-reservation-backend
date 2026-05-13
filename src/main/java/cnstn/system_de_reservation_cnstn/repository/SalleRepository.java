@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface SaleRepository extends JpaRepository<Salle, Long> {
+public interface SalleRepository extends JpaRepository<Salle, Long> {
 
     List<Salle> findByEvenementIsNull();
     long countByEvenementIsNotNull();

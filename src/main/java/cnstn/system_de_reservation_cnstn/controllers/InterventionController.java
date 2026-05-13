@@ -1,8 +1,8 @@
 package cnstn.system_de_reservation_cnstn.controllers;
 
 import cnstn.system_de_reservation_cnstn.dto.CreateInterventionRequest;
-import cnstn.system_de_reservation_cnstn.dto.DsnCompleteInterventionRequest;
-import cnstn.system_de_reservation_cnstn.dto.DsnStartInterventionRequest;
+import cnstn.system_de_reservation_cnstn.dto.AdminCompleteInterventionRequest;
+import cnstn.system_de_reservation_cnstn.dto.AdminStartInterventionRequest;
 import cnstn.system_de_reservation_cnstn.dto.InterventionDto;
 import cnstn.system_de_reservation_cnstn.services.InterventionService;
 import lombok.RequiredArgsConstructor;
@@ -89,56 +89,26 @@ public class InterventionController {
     }
 
     @PostMapping("/admin/{id}/start")
-    public InterventionDto startAdmin(Authentication auth, @PathVariable Long id, @RequestBody DsnStartInterventionRequest req) {
+    public InterventionDto startAdmin(Authentication auth, @PathVariable Long id, @RequestBody AdminStartInterventionRequest req) {
         assertAdmin(auth);
-        return interventionService.startDsn(id, req);
+        return interventionService.startAdmin(id, req);
     }
 
     @PostMapping("/admin/{id}/complete")
-    public InterventionDto completeAdmin(Authentication auth, @PathVariable Long id, @RequestBody DsnCompleteInterventionRequest req) {
+    public InterventionDto completeAdmin(Authentication auth, @PathVariable Long id, @RequestBody AdminCompleteInterventionRequest req) {
         assertAdmin(auth);
-        return interventionService.completeDsn(id, req);
+        return interventionService.completeAdmin(id, req);
     }
 
     @PostMapping("/admin/{id}/repair")
     public InterventionDto repairAdmin(Authentication auth, @PathVariable Long id) {
         assertAdmin(auth);
-        return interventionService.repairDsn(id);
+        return interventionService.repairAdmin(id);
     }
 
     @PostMapping("/admin/{id}/broken")
     public InterventionDto brokenAdmin(Authentication auth, @PathVariable Long id) {
         assertAdmin(auth);
-        return interventionService.brokenDsn(id);
-    }
-
-    @GetMapping("/dsn/pending")
-    public List<InterventionDto> pendingDsn(Authentication auth) {
-        assertAdmin(auth);
-        return interventionService.pendingAdmin();
-    }
-
-    @PostMapping("/dsn/{id}/start")
-    public InterventionDto startDsn(Authentication auth, @PathVariable Long id, @RequestBody DsnStartInterventionRequest req) {
-        assertAdmin(auth);
-        return interventionService.startDsn(id, req);
-    }
-
-    @PostMapping("/dsn/{id}/complete")
-    public InterventionDto completeDsn(Authentication auth, @PathVariable Long id, @RequestBody DsnCompleteInterventionRequest req) {
-        assertAdmin(auth);
-        return interventionService.completeDsn(id, req);
-    }
-
-    @PostMapping("/dsn/{id}/repair")
-    public InterventionDto repairDsn(Authentication auth, @PathVariable Long id) {
-        assertAdmin(auth);
-        return interventionService.repairDsn(id);
-    }
-
-    @PostMapping("/dsn/{id}/broken")
-    public InterventionDto brokenDsn(Authentication auth, @PathVariable Long id) {
-        assertAdmin(auth);
-        return interventionService.brokenDsn(id);
+        return interventionService.brokenAdmin(id);
     }
 }

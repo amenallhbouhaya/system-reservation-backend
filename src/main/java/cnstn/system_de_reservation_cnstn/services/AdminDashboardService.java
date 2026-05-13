@@ -3,9 +3,9 @@ package cnstn.system_de_reservation_cnstn.services;
 import cnstn.system_de_reservation_cnstn.dto.AdminDashboardStatsDto;
 import cnstn.system_de_reservation_cnstn.models.EvenementStatut;
 import cnstn.system_de_reservation_cnstn.models.InterventionStatus;
-import cnstn.system_de_reservation_cnstn.repository.EvenmentRepository;
+import cnstn.system_de_reservation_cnstn.repository.EvenementRepository;
 import cnstn.system_de_reservation_cnstn.repository.InterventionRepository;
-import cnstn.system_de_reservation_cnstn.repository.SaleRepository;
+import cnstn.system_de_reservation_cnstn.repository.SalleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AdminDashboardService {
 
-    private final EvenmentRepository evenmentRepository;
+    private final EvenementRepository evenmentRepository;
     private final InterventionRepository interventionRepository;
-    private final SaleRepository saleRepository;
+    private final SalleRepository saleRepository;
 
     public AdminDashboardStatsDto stats() {
         long evenementsTotal = evenmentRepository.count();
