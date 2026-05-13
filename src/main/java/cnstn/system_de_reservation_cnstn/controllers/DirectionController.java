@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping({"/api/directions", "/Direction"})
+@CrossOrigin(origins = "*")
 public class DirectionController {
     private final DirectionService directionService;
 

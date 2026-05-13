@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/CatDocument")
+@CrossOrigin(origins = "*")
 public class CatDocumentController {
 
     private final CatDocumentService catDocumentService;

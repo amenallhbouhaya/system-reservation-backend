@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin/roles")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class AdminRoleController {
 
     private final AdminRoleService adminRoleService;

@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/responsable-securite/evenements")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ResponsableSecuriteEvenementController {
 
     private final EvenementService evenementService;

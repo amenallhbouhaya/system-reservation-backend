@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/salles")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ApiSalleController {
 
     private final EvenementService evenementService;

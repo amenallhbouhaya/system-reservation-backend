@@ -17,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/interventions")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class InterventionController {
 
     private final InterventionService interventionService;

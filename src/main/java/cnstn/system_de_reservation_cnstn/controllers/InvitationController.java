@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/invitations")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class InvitationController {
 
     private final EvenementService evenementService;

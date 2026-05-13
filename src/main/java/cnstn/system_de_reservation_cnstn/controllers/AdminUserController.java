@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class AdminUserController {
 
     private final AdminUserService adminUserService;

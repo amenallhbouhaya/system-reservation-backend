@@ -12,6 +12,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/chef-hierarchique/users")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ChefHierarchiqueUserController {
 
     private final ChefHierarchiqueUserService chefHierarchiqueUserService;

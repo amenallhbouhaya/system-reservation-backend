@@ -11,6 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping({"/api/directeur-dsn/documents", "/directeur-dsn/documents"})
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class DirecteurDsnDocumentController {
 
     private final DocumentService documentService;
