@@ -5,7 +5,7 @@ import cnstn.system_de_reservation_cnstn.dto.equipement.EquipementResponse;
 import cnstn.system_de_reservation_cnstn.services.EquipementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
