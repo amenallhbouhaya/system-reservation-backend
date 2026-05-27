@@ -4,12 +4,10 @@ import cnstn.system_de_reservation_cnstn.models.Direction;
 import cnstn.system_de_reservation_cnstn.services.DirectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping({"/api/directions", "/Direction"})
-@CrossOrigin(origins = "*")
 public class DirectionController {
     private final DirectionService directionService;
 

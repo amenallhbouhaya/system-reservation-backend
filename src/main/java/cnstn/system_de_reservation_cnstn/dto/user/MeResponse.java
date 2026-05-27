@@ -9,7 +9,5 @@ public record MeResponse(
         String adresse,
         int telephone,
         int matricule,
-        String role,
-        Long serviceId,
-        String serviceNom
+        String role
 ) {}

@@ -15,7 +15,6 @@ public record InterventionDto(
         String demandeurNom,
         String demandeurPrenom,
         String demandeurEmail,
-        String serviceNom,
         List<Long> equipementIds,
         String chefCommentaire,
         String repairMode,

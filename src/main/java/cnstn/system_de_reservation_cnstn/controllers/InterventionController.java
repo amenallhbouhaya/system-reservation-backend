@@ -10,14 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/interventions")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class InterventionController {
 
     private final InterventionService interventionService;

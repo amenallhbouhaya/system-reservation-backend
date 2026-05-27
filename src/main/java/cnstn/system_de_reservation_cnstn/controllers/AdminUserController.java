@@ -6,14 +6,12 @@ import cnstn.system_de_reservation_cnstn.services.AdminUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AdminUserController {
 
     private final AdminUserService adminUserService;

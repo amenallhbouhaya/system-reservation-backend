@@ -56,10 +56,6 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur")
     @JsonIgnore
     private List<Evenement> evenements;
-    @ManyToOne
-    @JoinColumn(name = "service_id")
-    private Services service;
-
     @ManyToMany
     @JoinTable(
             name = "utilisateur_document",

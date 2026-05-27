@@ -6,13 +6,11 @@ import cnstn.system_de_reservation_cnstn.services.SalleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
 @RequestMapping({"/api/salles", "/Salle"})
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class SalleController {
 
     private final SalleService salleService;

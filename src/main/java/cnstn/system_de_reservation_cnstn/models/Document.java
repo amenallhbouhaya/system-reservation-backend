@@ -31,7 +31,5 @@ public class Document {
     @ManyToMany(mappedBy = "documents")
     @JsonIgnore
     private List<Utilisateur> utilisateurs = new ArrayList<>();
-
-
 }
 

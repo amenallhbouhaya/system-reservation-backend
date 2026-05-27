@@ -6,13 +6,11 @@ import cnstn.system_de_reservation_cnstn.models.Evenement;
 import cnstn.system_de_reservation_cnstn.services.EvenementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/responsable-securite/evenements")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class ResponsableSecuriteEvenementController {
 
     private final EvenementService evenementService;

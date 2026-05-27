@@ -289,7 +289,6 @@ public class InterventionService {
             i.getUtilisateur() != null ? i.getUtilisateur().getNom() : null,
             i.getUtilisateur() != null ? i.getUtilisateur().getPrenom() : null,
                 i.getUtilisateur() != null ? i.getUtilisateur().getEmail() : null,
-            i.getService() != null ? i.getService().getNom() : null,
             eqIds,
             i.getChefCommentaire(),
             i.getRepairMode() != null ? i.getRepairMode().name() : null,

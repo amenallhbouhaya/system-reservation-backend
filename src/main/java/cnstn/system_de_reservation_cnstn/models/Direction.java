@@ -1,6 +1,5 @@
 package cnstn.system_de_reservation_cnstn.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,9 +18,6 @@ public class Direction {
     @Column(nullable = false)
     private String nom;
     private String description;
-    @JsonIgnore
-    @OneToMany(mappedBy = "direction")
-    private List<Services> services;
     @OneToMany(mappedBy = "direction")
     private List<CatDocument>  catDocument;
 }

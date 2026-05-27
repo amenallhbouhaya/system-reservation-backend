@@ -4,12 +4,10 @@ import cnstn.system_de_reservation_cnstn.models.Utilisateur;
 import cnstn.system_de_reservation_cnstn.services.UtilisateurService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
 @RequestMapping("/Utilisateur")
-@CrossOrigin(origins = "*")
 public class UtilisateurController {
     private final UtilisateurService utilisateurService;
 

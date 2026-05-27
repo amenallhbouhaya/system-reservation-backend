@@ -5,13 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.Map;
 
 @RestController
 @RequestMapping({"/api/directeur-dsn/documents", "/directeur-dsn/documents"})
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class DirecteurDsnDocumentController {
 
     private final DocumentService documentService;

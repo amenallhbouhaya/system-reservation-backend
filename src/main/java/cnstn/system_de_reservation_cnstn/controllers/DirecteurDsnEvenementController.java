@@ -6,13 +6,11 @@ import cnstn.system_de_reservation_cnstn.models.Evenement;
 import cnstn.system_de_reservation_cnstn.services.EvenementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/directeur-dsn/evenements")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class DirecteurDsnEvenementController {
 
     private final EvenementService evenementService;

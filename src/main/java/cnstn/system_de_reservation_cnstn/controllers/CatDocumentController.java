@@ -4,12 +4,10 @@ import cnstn.system_de_reservation_cnstn.models.CatDocument;
 import cnstn.system_de_reservation_cnstn.services.CatDocumentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/CatDocument")
-@CrossOrigin(origins = "*")
 public class CatDocumentController {
 
     private final CatDocumentService catDocumentService;

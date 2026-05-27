@@ -1,7 +1,6 @@
 package cnstn.system_de_reservation_cnstn.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,10 +38,6 @@ public class Intervention {
             inverseJoinColumns = @JoinColumn(name = "equipement_id")
     )
     private List<Equipement> equipement = new ArrayList<>();
-
-        @ManyToOne
-        @JoinColumn(name = "service_id")
-        private Services service;
 
         private String chefCommentaire;
         private Date chefDecisionAt;

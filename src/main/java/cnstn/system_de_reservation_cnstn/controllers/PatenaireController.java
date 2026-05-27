@@ -4,12 +4,10 @@ import cnstn.system_de_reservation_cnstn.models.Partenaire;
 import cnstn.system_de_reservation_cnstn.services.PartenaireService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @RestController
 @RequestMapping("/partenaire")
-@CrossOrigin(origins = "*")
 public class PatenaireController {
     private final PartenaireService partenaireService;
     public PatenaireController(PartenaireService partenaireService) {

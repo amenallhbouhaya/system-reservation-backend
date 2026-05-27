@@ -79,9 +79,6 @@ public class UserMeService {
     }
 
     private static MeResponse toMeResponse(Utilisateur utilisateur) {
-        Long serviceId = (utilisateur.getService() != null) ? utilisateur.getService().getId() : null;
-        String serviceNom = (utilisateur.getService() != null) ? utilisateur.getService().getNom() : null;
-
         return new MeResponse(
                 utilisateur.getId(),
                 utilisateur.getNom(),
@@ -91,9 +88,7 @@ public class UserMeService {
                 utilisateur.getAdresse(),
                 utilisateur.getTelephone(),
                 utilisateur.getMatricule(),
-                utilisateur.getRole(),
-                serviceId,
-                serviceNom
+            utilisateur.getRole()
         );
     }
 }
